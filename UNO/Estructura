@@ -1,14 +1,8 @@
 #include <iostream>
 
- 
-
 using namespace std;
 
- 
-
 const int T=108;
-
- 
 
 struct sCarta{
     string tipoCarta;
@@ -16,13 +10,12 @@ struct sCarta{
     string color;
     int disponibilidad;
     };
+    
 struct sJugador{
     string nombre;
     int cantCartas;
     int puntos;
     };
-
- 
 
 void crearCartas(sCarta &p,int contador){
     //tipo carta
@@ -31,8 +24,6 @@ void crearCartas(sCarta &p,int contador){
     }else{
         p.tipoCarta="especial";
     }
-
- 
 
     //color
     if (contador<=18 || (contador>75 && contador<=81)){
@@ -57,9 +48,6 @@ void verCartas(sCarta p,int contador){
      cout <<contador<< p.tipoCarta << "\t" << p.valor << "\t" << p.color << "\t" << p.disponibilidad <<'\t';
     cout << endl;
 }
-
- 
-
 
 int main()
 {
