@@ -1,0 +1,61 @@
+#include <iostream>
+
+using namespace std;
+
+const int T=108;
+
+struct sCarta{
+    string tipoCarta;
+    int valor;
+    string color;
+    int disponibilidad;
+    };
+    
+struct sJugador{
+    string nombre;
+    int cantCartas;
+    int puntos;
+    };
+
+void crearCartas(sCarta &p,int contador){
+    //tipo carta
+    if (contador<=75){
+        p.tipoCarta="normal";
+    }else{
+        p.tipoCarta="especial";
+    }
+
+    //color
+    if (contador<=18 || (contador>75 && contador<=81)){
+        p.color="Rojo";
+    }
+    if ((contador>18 && contador<=37) || (contador>81 && contador<=87)){
+        p.color="Azul";
+    }
+    if ((contador>37 && contador<=56) || (contador>87 && contador<=93)){
+        p.color="Amarillo";
+    }
+    if ((contador>56 && contador<=75) || (contador>93 && contador<=99)){
+        p.color="Verde";
+    }
+    if (contador>99){
+        p.color="Negro";
+    }
+    //disponibilidad
+    p.disponibilidad=1;
+}
+void verCartas(sCarta p,int contador){
+     cout <<contador<< p.tipoCarta << "\t" << p.valor << "\t" << p.color << "\t" << p.disponibilidad <<'\t';
+    cout << endl;
+}
+
+int main()
+{
+    sCarta baraja[T];
+    for (int i=0;i<T;i++){
+        crearCartas(baraja[i],i);
+    }
+    for(int i=0;i<=T;i++){
+        verCartas(baraja[i],i);
+    }
+    return 0;
