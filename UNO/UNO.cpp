@@ -3,99 +3,87 @@
 #include <time.h>
 
 using namespace std;
-
 const int CARDS = 108;
 
 
-
-class Card {
+struct Card {
 public:
     string type;
     string color;
     int value;
 };
 
-class Player {
+struct Player {
 public:
     string nickname;
     int cantCartas;
     int score;
     Card deck[10];
-    void play() {
-        //pone una carta
-    }
 };
 
-class Table {
+struct Table {
 public:
     Card lastCard;
     Card picking[CARDS];
-    void createCards() {
-        srand(time(NULL));
-        create();
-        mix();
-    };
-    void showDeck() {
-        for (int i = 0; i < CARDS; i++) {
-            cout << picking[i].color << " " << picking[i].value << " " << picking[i].type << endl;
-        }
-    }
-private:
-    void deleteCard() {
-        ;
-    }
-    void create() {
-        for (int i = 0; i < CARDS; i++) {
-            if (i < 25) { picking[i].color = "Blue"; }
-            if (i < 50 && i >= 25) { picking[i].color = "Red"; }
-            if (i < 75 && i >= 50) { picking[i].color = "Yellow"; }
-            if (i < 100 && i >= 75) { picking[i].color = "Green"; }
-            if (i < 108 && i >= 100) { picking[i].color = "Black"; }
-        }// Para los colores
-        int value = 1;
-        for (int i = 0; i < CARDS; i++) {
-
-            if (i < (CARDS - 8)) {
-            //antes de las cartas negras
-
-                picking[i].value = value <= 12 ? value : (value - 13);
-                // para valores mayores a 9 se trata de cartas especiales
-                // Toma 2 == 10; Cambio de sentido == 11;Pierde turno == 12; 
-
-                picking[i].type = picking[i].value < 10 ? "Normal" : "Special";
-
-                value = value == 25 ? 0 : value; // Sistema para creae solo un 0
-                value++;
-            }
-            if (i >= (CARDS - 8)) {
-                picking[i].type = "Special";
-                picking[i].value = i < (CARDS - 4) ? 13 : 14;
-                //Cambio de color == 13 ; Toma 4 == 14
-            }
-
-        }// Para los valores y tipo
-    }
-    void mix(){
-        for (int i = 0; i < CARDS; i++) {
-            int random = rand() % CARDS;
-            Card temp = picking[i];
-            picking[i] = picking[random];
-            picking[random] = temp;
-        }
-    }
 };
 
 
-void mockingPlayers(Player v[], Table);
+void mockingPlayers(Player [], Table);
+
+void createCards(Table &a) {
+    srand(time(NULL));
+    for (int i = 0; i < CARDS; i++) {
+        if (i < 25) { a.picking[i].color = "Blue"; }
+        if (i < 50 && i >= 25) { a.picking[i].color = "Red"; }
+        if (i < 75 && i >= 50) { a.picking[i].color = "Yellow"; }
+        if (i < 100 && i >= 75) { a.picking[i].color = "Green"; }
+        if (i < 108 && i >= 100) { a.picking[i].color = "Black"; }
+    }// Para los colores
+    int value = 1;
+    for (int i = 0; i < CARDS; i++) {
+
+        if (i < (CARDS - 8)) {
+            //antes de las cartas negras
+
+            a.picking[i].value = value <= 12 ? value : (value - 13);
+            // para valores mayores a 9 se trata de cartas especiales
+            // Toma 2 == 10; Cambio de sentido == 11;Pierde turno == 12; 
+
+            a.picking[i].type = a.picking[i].value < 10 ? "Normal" : "Special";
+
+            value = value == 25 ? 0 : value; // Sistema para creae solo un 0
+            value++;
+        }
+        if (i >= (CARDS - 8)) {
+            a.picking[i].type = "Special";
+            a.picking[i].value = i < (CARDS - 4) ? 13 : 14;
+            //Cambio de color == 13 ; Toma 4 == 14
+        }
+
+    }// Para los valores y tipo
+    for (int i = 0; i < CARDS; i++) {
+        int random = rand() % CARDS;
+        Card temp = a.picking[i];
+        a.picking[i] = a.picking[random];
+        a.picking[random] = temp;
+    }
+};
+void showDeck(Table &a) {
+    for (int i = 0; i < CARDS; i++) {
+        cout << a.picking[i].color << " " << a.picking[i].value << " " << a.picking[i].type << endl;
+    }
+}
 
 int main() {
     Table theTable;
     Player players[4];
-    theTable.createCards();
-    theTable.showDeck();
+    createCards(theTable);
+    showDeck(theTable);
     mockingPlayers(players, theTable);
     return 0;
 }
+
+
 
 
 void mockingPlayers(Player players[], Table table) {
