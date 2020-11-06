@@ -7,14 +7,12 @@ const int CARDS = 108;
 
 
 struct Card {
-public:
     string type;
     string color;
     int value;
 };
 
 struct Player {
-public:
     string nickname;
     int cantCartas;
     int score;
@@ -22,7 +20,6 @@ public:
 };
 
 struct Table {
-public:
     Card lastCard;
     Card picking[CARDS];
 };
