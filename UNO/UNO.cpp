@@ -66,20 +66,31 @@ void createCards(Table &a) {
         Card temp = a.picking[i];
         a.picking[i] = a.picking[random];
         a.picking[random] = temp;
-    }
+    }// mixer
 };
-void showDeck(Table &a) {
+void showDeck(Table a) {
     for (int i = 0; i < CARDS; i++) {
         cout << a.picking[i].color << " " << a.picking[i].value << " " << a.picking[i].type << endl;
     }
 }
 
+
 int main() {
+    const int PP = 4;//number of players
     Table theTable;
-    Player players[4];
+    Player players[PP];
     createCards(theTable);
     showDeck(theTable);
     mockingPlayers(players, theTable);
+    bool winner = false;
+    string message;
+    while (!winner) {
+        for (int i =0; i < PP; i++) {
+            cin >> message;
+            cout << players[i].nickname << " " << message<< endl;
+        }
+        winner = true;
+    }
     return 0;
 }
 
