@@ -72,6 +72,25 @@ void showDeck(Table a) {
 }
 
 
+void game(Player players[], int PP) {
+    int S;//seleccionada
+    int jugandocon = 7;
+    bool winner = false;
+    while (!winner) {
+        for (int i = 0; i < PP; i++) {
+            cout << players[i].nickname << ": " << endl;
+            for (int j = 0; j < jugandocon; j++) {
+                cout << '\t' << j+1 << '\t'<< players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type << endl;
+            }
+            cout << "Selecciona una carta:" << endl ;
+            do { cin >> S; } while (S > jugandocon);
+            S= S-1;
+            cout << '\t' << players[i].deck[S].color << '\t' << players[i].deck[S].value << '\t' << players[i].deck[S].type << endl;
+        }
+        winner = true;
+    }
+}
+
 int main() {
     const int PP = 4;//number of players
     Table theTable;
@@ -79,15 +98,7 @@ int main() {
     createCards(theTable);
     showDeck(theTable);
     mockingPlayers(players, theTable);
-    bool winner = false;
-    string message;
-    while (!winner) {
-        for (int i =0; i < PP; i++) {
-            cin >> message;
-            cout << players[i].nickname << " " << message<< endl;
-        }
-        winner = true;
-    }
+    game(players, PP);
     return 0;
 }
 
@@ -104,12 +115,6 @@ void mockingPlayers(Player players[], Table table) {
         for (int j= 0; j < 7; j++) {
             players[i].deck[j] = table.picking[ca];
             ca++;
-        }
-    }
-    for (int i = 0; i < 4; i++) {
-        cout << players[i].nickname<< ": " <<  endl;
-        for (int j = 0; j < 7; j++) {
-            cout << " " << players[i].deck[j].color << " " << players[i].deck[j].value << " " << players[i].deck[j].type << endl;
         }
     }
 }
