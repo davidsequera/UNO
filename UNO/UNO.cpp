@@ -63,7 +63,25 @@ void game(Player players[], int PP, Table &theTable)
             cout << players[i].nickname << ": " << endl;
             for (int j = 0; j < players[i].NCards; j++)
             {
-                cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type << endl;
+                cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type;
+                if(players[i].deck[j].value==10){
+                cout<<"\t- Toma dos"<<endl;
+                }
+                if(players[i].deck[j].value==11){
+                cout<<"\t- Cambio de sentido"<<endl;
+                }
+                if(players[i].deck[j].value==12){
+                cout<<"\t- Pierde turno"<<endl;
+                }
+                if(players[i].deck[j].value==13){
+                cout<<"\t- Cambio de color"<<endl;
+                }
+                if(players[i].deck[j].value==14){
+                cout<<"\t- Toma cuatro"<<endl;
+                }
+                if(players[i].deck[j].value<10){
+                cout<<endl;
+                }
             }
             cout << "\nSelecciona una carta:" << endl;
             do
@@ -124,7 +142,7 @@ void createCards(Table& a)
 
             a.pick[i].type = a.pick[i].value < 10 ? "Normal" : "Special";
 
-            value = value == 25 ? 0 : value; // Sistema para creae solo un 0
+            value = value == 25 ? 0 : value; // Sistema para crear solo un 0
             value++;
         }
         if (i >= (CARDS - 8))
@@ -207,4 +225,5 @@ void mockingPlayers(Player players[], Table &table)
         players[i].NCards = 7;
     }
 }
+
 
