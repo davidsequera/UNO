@@ -21,7 +21,8 @@ struct Player
     Card deck[CARDS];
 };
 
-struct Table {
+struct Table
+{
     int Npick;
     int Ndeck;
     string color;
@@ -48,9 +49,9 @@ void turns(Player players[], Table& theTable);
 bool conditions(Card, Table);
 void askforColor(Table&);
 void reverse(Player[], int, int&);
-//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-int main() {
+int main()
+{
 
     const int NP = 4;//number of players
     Table theTable;
@@ -63,9 +64,11 @@ int main() {
     return 0;
 }
 
-void game(Player players[], int NP, Table& theTable) {
+void game(Player players[], int NP, Table& theTable)
+{
     int winner = 0;
-    while (winner < 2) {
+    while (winner < 2)
+    {
         turns(players, theTable);
         winner++;
     }
@@ -73,34 +76,18 @@ void game(Player players[], int NP, Table& theTable) {
 
 
 
-void aame(Player players[], int NP, Table &theTable) {
+void aame(Player players[], int NP, Table &theTable)   //funcion prueba
+{
     int S;//seleccionada
-    int jugandocon = 7;
     bool winner = false;
-    while (!winner) {
-        for (int i = 0; i < NP; i++) {
+    while (!winner)
+    {
+        for (int i = 0; i < NP; i++)
+        {
             cout << players[i].nickname << ": " << endl;
             for (int j = 0; j < players[i].NCards; j++)
             {
                 cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type;
-                if(players[i].deck[j].value==10){
-                cout<<"\t- Toma dos"<<endl;
-                }
-                if(players[i].deck[j].value==11){
-                cout<<"\t- Cambio de sentido"<<endl;
-                }
-                if(players[i].deck[j].value==12){
-                cout<<"\t- Pierde turno"<<endl;
-                }
-                if(players[i].deck[j].value==13){
-                cout<<"\t- Cambio de color"<<endl;
-                }
-                if(players[i].deck[j].value==14){
-                cout<<"\t- Toma cuatro"<<endl;
-                }
-                if(players[i].deck[j].value<10){
-                cout<<endl;
-                }
             }
             cout << "\nSelecciona una carta:" << endl;
             do
@@ -118,14 +105,6 @@ void aame(Player players[], int NP, Table &theTable) {
                 cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type << endl;
             }
 
-            cout<<endl;
-            system("pause");
-            system("cls");
-            system("pause");
-
-            cout<<endl;
-            showDeck(theTable, "deck");
-            cout<<endl;
         }
         winner = true;
     }
@@ -134,27 +113,63 @@ void aame(Player players[], int NP, Table &theTable) {
 
 //funciones para funcionalidad del juego
 
-void turns(Player players[], Table& theTable) {
+void turns(Player players[], Table& theTable)
+{
     int NP = 4;//parametro
-    for (int i = 0; i < NP; i++) {
-        cout << "Carta Actual:" << '\t' << theTable.deck[theTable.Ndeck].color << '\t' << theTable.deck[theTable.Ndeck].value << '\t' << theTable.deck[theTable.Ndeck].type << endl;
-        cout << "Color Actual:"<< '\t'  << theTable.color << endl;
-        cout << players[i].nickname << ": " << endl;
-        for (int j = 0; j < players[i].NCards; j++) {
-            cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type << endl;
+    for (int i = 0; i < NP; i++)
+    {
+        cout << "\nCarta Actual en el mazo:" << '\t' << theTable.deck[theTable.Ndeck].color << '\t' << theTable.deck[theTable.Ndeck].value << '\t' << theTable.deck[theTable.Ndeck].type << endl;
+        cout << "Color Actual en el mazo:"<< '\t'  << theTable.color << endl;
+        cout <<"\n"<<players[i].nickname << ": " << endl;
+        cout <<"\tCartas actuales"<<endl;
+        for (int j = 0; j < players[i].NCards; j++)
+        {
+            cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type;
+            if(players[i].deck[j].value==10)
+            {
+                cout<<"\t- Toma dos"<<endl;
+            }
+            if(players[i].deck[j].value==11)
+            {
+                cout<<"\t- Cambio de sentido"<<endl;
+            }
+            if(players[i].deck[j].value==12)
+            {
+                cout<<"\t- Pierde turno"<<endl;
+            }
+            if(players[i].deck[j].value==13)
+            {
+                cout<<"\t- Cambio de color"<<endl;
+            }
+            if(players[i].deck[j].value==14)
+            {
+                cout<<"\t- Toma cuatro"<<endl;
+            }
+            if(players[i].deck[j].value<10)
+            {
+                cout<<endl;
+            }
         }
         int S;//seleccion del jugador
         bool achieve = false;// comprobante
-        do {
-            cout << players[i].nickname << " Selecciona una carta:" << endl;
-            do { cin >> S; } while (S > players[i].NCards || S < 0); S--;
-            if (S >= 0) {
+        do
+        {
+            cout <<"\n"<< players[i].nickname << " Selecciona una carta:" << endl;
+            do
+            {
+                cin >> S;
+            }
+            while (S > players[i].NCards || S < 0);
+            S--;
+            if (S >= 0)
+            {
                 achieve = conditions(players[i].deck[S], theTable);
-                if (achieve) {
+                if (achieve)
+                {
                     insertCard(theTable, players[i].deck[S]);
                     //cambia tambien el color de la tabla
                     deleteCardPlayer(players[i], S);
-                    // Toma 2 == 10; Cambio de sentido == 11;Pierde turno == 12;Cambio de color == 13 ; Toma 4 == 14; 
+                    // Toma 2 == 10; Cambio de sentido == 11;Pierde turno == 12;Cambio de color == 13 ; Toma 4 == 14;
                     //if (players[i].deck[S].value == 10) {
                     //    insertCardPlayer(players[i + 1], theTable);
                     //    insertCardPlayer(players[i + 1], theTable);
@@ -179,48 +194,66 @@ void turns(Player players[], Table& theTable) {
                 achieve = true;
             }
 
-        } while (!achieve);
-        //system("cls");
-        //system("pause");
+        }
+        while (!achieve);
+        system("pause");
+        system("cls");
+        system("pause");
     }
 }
 
-bool conditions(Card Cplayer, Table table) {
-    cout << "[conditions]" << endl;
-    cout << Cplayer.color << '\t' << Cplayer.value << '\t' << Cplayer.type << endl;
-    if (Cplayer.type == "Normal") {
-        if (Cplayer.color != table.color && Cplayer.value != table.deck[table.Ndeck].value) {
-            if (Cplayer.value != table.deck[table.Ndeck].value) {
+bool conditions(Card Cplayer, Table table)
+{
+    cout << "\nCarta seleccionada: "  << Cplayer.color << '\t' << Cplayer.value << '\t' << Cplayer.type << endl;
+    if (Cplayer.type == "Normal")
+    {
+        if (Cplayer.color != table.color && Cplayer.value != table.deck[table.Ndeck].value)
+        {
+            if (Cplayer.value != table.deck[table.Ndeck].value)
+            {
+                cout << "\n[You can't pick this card!]" << endl;
                 cout << "Valor Carta jugador "<< Cplayer.value << " VS " << "Valor Carta tabla " <<  table.deck[table.Ndeck].value <<endl;
             }
             return false;
         }
     }
-    else if(Cplayer.color != "Black" && Cplayer.color != table.color) {
+    else if(Cplayer.color != "Black" && Cplayer.color != table.color)
+    {
+        cout << "[You can't pick this card !!]" << endl;
         return false;
     }
     return true;
 }
 
-void askforColor(Table& theTable){
+void askforColor(Table& theTable)
+{
     string color;
     cout << "Seleccione un color" << endl;
     cout << "Red, Green, Blue, Yellow" << endl;
-    do { cin >> color; } while (color != "Red" || color != "Green" || color != "Blue" || color != "Yellow");
+    do
+    {
+        cin >> color;
+    }
+    while (color != "Red" || color != "Green" || color != "Blue" || color != "Yellow");
     theTable.color = color;
 }
-void reverse(Player players[], int size, int &i) {
+
+void reverse(Player players[], int size, int &i)
+{
     Player copy[100];
-    for (int u = 0; u < size; u++) {
+    for (int u = 0; u < size; u++)
+    {
         copy[u] = players[u];
     }//Hacer una copia
     int u = size - 1;
     int v = 0;
-    do {
+    do
+    {
         players[u] = copy[v];
         u--;
         v++;
-    } while (u > -1);
+    }
+    while (u > -1);
     i = abs(i - size + 1);//Arregla la posicion
 }
 
@@ -229,7 +262,8 @@ void reverse(Player players[], int size, int &i) {
 //funciones para manejo de arreglos
 
 
-void createCards(Table& a) {
+void createCards(Table& a)
+{
     srand(time(NULL));
     for (int i = 0; i < CARDS; i++)
     {
@@ -292,7 +326,10 @@ void createCards(Table& a) {
 
     //A�adir carta a deck
     int PickP = 0;//posicion
-    while (a.pick[PickP].type == "Special") { PickP++; }//garantizar que primera carta no es especial
+    while (a.pick[PickP].type == "Special")
+    {
+        PickP++;    //garantizar que primera carta no es especial
+    }
     Card PickCard = a.pick[0];
     a.pick[0] = a.pick[PickP];
     a.pick[PickP] = PickCard;
@@ -300,9 +337,13 @@ void createCards(Table& a) {
     a.color = a.deck[a.Ndeck].color;
     deleteCard(a);
 }; //crea maso de 108 en pick y carta inicial
-void showDeck(Table a, string x) {
-    if (x == "pick") {
-        for (int i = 0; i < a.Npick; i++) {
+
+void showDeck(Table a, string x)
+{
+    if (x == "pick")
+    {
+        for (int i = 0; i < a.Npick; i++)
+        {
             cout << a.pick[i].color << '\t' << a.pick[i].value << '\t' << a.pick[i].type << endl;
         }
     }
@@ -314,6 +355,7 @@ void showDeck(Table a, string x) {
         }
     }
 }
+
 void deleteCard(Table &theTable)
 {
     for (int i = 1; i < theTable.Npick; i++)
@@ -322,17 +364,26 @@ void deleteCard(Table &theTable)
     }
     theTable.Npick--;
 }//elimina una carta del inicio de pick
-void insertCard(Table& theTable, Card card) {
-    if (theTable.color != card.color) { theTable.color = card.color; }
+
+void insertCard(Table& theTable, Card card)
+{
+    if (theTable.color != card.color)
+    {
+        theTable.color = card.color;
+    }
     theTable.Ndeck++;
     theTable.deck[theTable.Ndeck] = card;
 }//inserta una carta en deck
-void insertCardPlayer(Player& thePlayer, Table& table) {
+
+void insertCardPlayer(Player& thePlayer, Table& table)
+{
     thePlayer.deck[thePlayer.NCards] = table.pick[0];
     thePlayer.NCards++;
     deleteCard(table);
 }//inserta una carta en jugador
-void deleteCardPlayer(Player &thePlayer, int deleted) {
+
+void deleteCardPlayer(Player &thePlayer, int deleted)
+{
     Player copy = thePlayer;
     Card temp = copy.deck[deleted];
     copy.deck[deleted] = copy.deck[copy.NCards - 1];
@@ -344,22 +395,20 @@ void deleteCardPlayer(Player &thePlayer, int deleted) {
     }
     thePlayer.NCards = copy.NCards;
 }//elimina una carta de jugador, por indice
-void mockingPlayers(Player players[], Table &table) {
+
+void mockingPlayers(Player players[], Table &table)
+{
     players[0].nickname = "Martin";
     players[1].nickname = "Jhoseph";
     players[2].nickname = "Jaider";
     players[3].nickname = "David";
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < 4; i++)
+    {
         players[i].NCards = 0;
         players[i].score = 0;
-        for (int j= 0; j < 7; j++) {
+        for (int j= 0; j < 7; j++)
+        {
             insertCardPlayer(players[i], table);
         }
     }
 }//crea los jugadores
-
-
-//UNO PREGUNTAR DESPUES AL JUGADOR
-
-
-
