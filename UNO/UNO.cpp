@@ -29,7 +29,7 @@ struct Table
     Card deck[CARDS];
     Card pick[CARDS];
 };
-
+ 
 
 void game(Player [], int, Table&);
 
