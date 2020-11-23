@@ -38,7 +38,6 @@ void mockingPlayers(Player [], Table&);
 void deleteCard(Table&);
 void insertCard(Table&, Card);
 
-
 int main()
 {
     const int PP = 4;//number of players
@@ -48,7 +47,7 @@ int main()
     //showDeck(theTable, "pick");
     mockingPlayers(players, theTable);
     game(players, PP, theTable);
-    showDeck(theTable, "deck");
+    //showDeck(theTable, "deck");
     return 0;
 }
 void game(Player players[], int PP, Table &theTable)
@@ -90,6 +89,7 @@ void game(Player players[], int PP, Table &theTable)
             }
             while (S > players[i].NCards);
             S--;
+            cout << "\nCarta seleccionada: " <<players[i].deck[S].color << '\t' << players[i].deck[S].value << '\t' << players[i].deck[S].type << endl;
             insertCard(theTable, players[i].deck[S]);
             deleteCardPlayer(players[i], S);
             cout <<"\nCartas actuales de "<<players[i].nickname<< ": "<<endl;
@@ -97,6 +97,14 @@ void game(Player players[], int PP, Table &theTable)
             {
                 cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type << endl;
             }
+
+            cout<<endl;
+            system("pause");
+            system("cls");
+            system("pause");
+
+            cout<<endl;
+            showDeck(theTable, "deck");
             cout<<endl;
         }
         winner = true;
@@ -225,5 +233,6 @@ void mockingPlayers(Player players[], Table &table)
         players[i].NCards = 7;
     }
 }
+
 
 
