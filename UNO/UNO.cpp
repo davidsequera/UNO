@@ -49,6 +49,7 @@ int mockingPlayers(Player[], Table&);
 void deleteCard(Table&);
 void insertCard(Table&, Card);
 void insertCardPlayer(Player&, Table&);
+void createCards4Players(Player[], Table&, int);
 
 //funciones para funcionalidad del juego
 void turns(Player players[PLAYERS], Table& theTable, int);
@@ -112,18 +113,20 @@ void game(Player players[], Table& theTable)
 {
     int NP = 0;//number of players
     createCards(theTable, "initial");
-    NP = mockingPlayers(players, theTable);
+    NP = createPlayers(players, theTable);
     bool winner = false;
     while (!winner)
     {
+        createCards4Players(players, theTable, NP);
         turns(players, theTable, NP);
         for (int i = 0; i < NP; i++) {
-            if (players[i].score >= 50) {
+            if (players[i].score >= 500) {
                 system("cls");
                 cout << "El ganador es: " << players[i].nickname << endl << "Score: " << players[i].score << endl;
                 winner = true;
             }
         }
+
     }
 }
 
@@ -269,7 +272,7 @@ void turns(Player players[PLAYERS], Table& theTable, int NP)
                     }
                     if (tem.value == 12) {
                         i++;
-                        if (i >= NP) { i = 1; }
+                        if (i >= NP) { i = 0; }
                     }
                     if (tem.value == 11) {
                         reverse(players, NP, i);
@@ -545,24 +548,30 @@ int mockingPlayers(Player players[], Table &table)
 int createPlayers(Player players[], Table& table)
 {
     int NP = 0;
-    cout << "Cuantos Jugadores Van a jugar: max.15" << endl;
+    cout << "Cuantos Jugadores Van a jugar: max."<< PLAYERS << endl;
     do
     {
         cin >> NP;
-    } while (NP > 15 && NP <= 0);
+    } while (NP > PLAYERS || NP <= 0);
+    cin.ignore(1);
     cout << "Ingrese los nombres:" << endl;
     for (int i = 0; i < NP; i++) {
-        cin >> players[i].nickname;
+       //cin >> players[i].nickname;
+       getline(cin, players[i].nickname);
+       players[i].score = 0;
     }
+
+    system("cls");
+    return NP;
+}//crea los jugadores y retorna el numero de ellos
+
+void createCards4Players(Player players[], Table& table, int NP) {
     for (int i = 0; i < NP; i++)
     {
         players[i].NCards = 0;
-        players[i].score = 0;
         for (int j = 0; j < 7; j++)
         {
             insertCardPlayer(players[i], table);
         }
     }
-    system("cls");
-    return NP;
-}//crea los jugadores y retorna el numero de ellos
+}
