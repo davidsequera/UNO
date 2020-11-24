@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-﻿// UNO.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
-
-=======
->>>>>>> dev
 #include <iostream>
 #include <math.h>
 #include <time.h>
@@ -49,9 +43,7 @@ void instructions(int);
 //funciones para manejo de arreglos
 void createCards(Table&, string);
 int createPlayers(Player [], Table&);
-void showDeck(Table, string);
 void deleteCardPlayer(Player &, int);
-int mockingPlayers(Player[], Table&);
 void deleteCard(Table&);
 void insertCard(Table&, Card);
 void insertCardPlayer(Player&, Table&);
@@ -287,16 +279,6 @@ void turns(Player players[PLAYERS], Table& theTable, int NP)
                 insertCardPlayer(players[i], theTable);
                 achieve = true;
             }
-
-<<<<<<< HEAD
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
-=======
         }
         while (!achieve);
         UNO(players[i], theTable);
@@ -478,24 +460,6 @@ void createCards(Table& a, string x)
     }
 }; //crea maso de 108 en pick y carta inicial
 
-void showDeck(Table a, string x)
-{
-    if (x == "pick")
-    {
-        for (int i = 0; i < a.Npick; i++)
-        {
-            cout << a.pick[i].color << '\t' << a.pick[i].value << '\t' << a.pick[i].type << endl;
-        }
-    }
-    if (x == "deck")
-    {
-        for (int i = 0; i < a.Ndeck; i++)
-        {
-            cout << a.deck[i].color << '\t' << a.deck[i].value << '\t' << a.deck[i].type << endl;
-        }
-    }
-}
-
 void deleteCard(Table &theTable)
 {
     for (int i = 1; i < theTable.Npick; i++)
@@ -539,24 +503,6 @@ void deleteCardPlayer(Player &thePlayer, int deleted)
     thePlayer.NCards = copy.NCards;
 }//elimina una carta de jugador, por indice
 
-int mockingPlayers(Player players[], Table &table)
-{
-    players[0].nickname = "Martin";
-    players[1].nickname = "Jhoseph";
-    players[2].nickname = "Jaider";
-    players[3].nickname = "David";
-    for (int i = 0; i < 4; i++)
-    {
-        players[i].NCards = 0;
-        players[i].score = 0;
-        for (int j= 0; j < 7; j++)
-        {
-            insertCardPlayer(players[i], table);
-        }
-    }
-    return 4;
-}//crea los jugadores
-
 int createPlayers(Player players[], Table& table)
 {
     int NP = 0;
@@ -587,4 +533,3 @@ void createCards4Players(Player players[], Table& table, int NP) {
         }
     }
 }
->>>>>>> dev
