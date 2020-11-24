@@ -1,6 +1,8 @@
 #include <iostream>
 #include <math.h>
 #include <time.h>
+#include <string>
+
 
 using namespace std;
 const int CARDS = 108; //tamaño fisico de las cartas
@@ -76,7 +78,7 @@ void game(Player players[], Table& theTable)
     {
         turns(players, theTable, NP);
         for (int i = 0; i < NP; i++) {
-            if (players[i].score >= 500) {
+            if (players[i].score >= 50) {
                 system("cls");
                 cout << "El ganador es: " << players[i].nickname << endl << "Score: " << players[i].score << endl;
                 winner = true;
@@ -178,26 +180,44 @@ void turns(Player players[PLAYERS], Table& theTable, int NP)
                 achieve = conditions(players[i].deck[S], theTable);
                 if (achieve)
                 {
+                    Card tem = players[i].deck[S];
                     insertCard(theTable, players[i].deck[S]);
+                    deleteCardPlayer(players[i], S);
                     //cambia tambien el color de la tabla
                     // Toma 2 == 10; Cambio de sentido == 11;Pierde turno == 12;Cambio de color == 13 ; Toma 4 == 14;
-                    if (players[i].deck[S].value == 10) {
-                        insertCardPlayer(players[i + 1], theTable);
-                        insertCardPlayer(players[i + 1], theTable);
+                    if (tem.value == 10) {
+                        if (i == (NP-1)) {
+                            insertCardPlayer(players[0], theTable);
+                            insertCardPlayer(players[0], theTable);
+                        }
+                        else {
+                            insertCardPlayer(players[i + 1], theTable);
+                            insertCardPlayer(players[i + 1], theTable);
+                        }
                     }
-                    if (players[i].deck[S].value == 11) {
+                    if (tem.value == 13) { askforColor(theTable); }
+                    if (tem.value == 14) {
+                        askforColor(theTable);
+                        if (i == (NP - 1)) {
+                            insertCardPlayer(players[0], theTable);
+                            insertCardPlayer(players[0], theTable);
+                            insertCardPlayer(players[0], theTable);
+                            insertCardPlayer(players[0], theTable);
+                        }
+                        else {
+                            insertCardPlayer(players[i + 1], theTable);
+                            insertCardPlayer(players[i + 1], theTable);
+                            insertCardPlayer(players[i + 1], theTable);
+                            insertCardPlayer(players[i + 1], theTable);
+                        }
+                    }
+                    if (tem.value == 12) {
+                        i++; 
+                        if (i >= NP) { i = 1; }
+                    }
+                    if (tem.value == 11) {
                         reverse(players, NP, i);
                     }
-                    if (players[i].deck[S].value == 12) { i++; }
-                    if (players[i].deck[S].value == 13) { askforColor(theTable); }
-                    if (players[i].deck[S].value == 14) {
-                        askforColor(theTable);
-                        insertCardPlayer(players[i+ 1], theTable);
-                        insertCardPlayer(players[i + 1], theTable);
-                        insertCardPlayer(players[i + 1], theTable);
-                        insertCardPlayer(players[i + 1], theTable);
-                    }
-                    deleteCardPlayer(players[i], S);
                 }
             }
             else
@@ -234,7 +254,7 @@ void UNO(Player &player,Table &theTable) {
         cout << "No, escribe No" << endl;
         do
         {
-            cin >> uno;
+            getline(cin, uno);
         } while (uno != "UNO" && uno != "No");
         if (uno == "No") {
             insertCardPlayer(player, theTable);
@@ -255,22 +275,13 @@ bool winnerCheck(Player player) {
 bool conditions(Card Cplayer, Table table)
 {
     cout << "\nCarta seleccionada: "  << Cplayer.color << '\t' << Cplayer.value << '\t' << Cplayer.type << endl;
-    if (Cplayer.type == "Normal")
+    if (Cplayer.color != "Black")
     {
         if (Cplayer.color != table.color && Cplayer.value != table.deck[table.Ndeck].value)
         {
-            if (Cplayer.value != table.deck[table.Ndeck].value)
-            {
-                cout << "\n[You can't pick this card!]" << endl;
-                cout << "Valor Carta jugador "<< Cplayer.value << " VS " << "Valor Carta tabla " <<  table.deck[table.Ndeck].value <<endl;
-            }
+            cout << "\n[You can't pick this card!]" << endl;
             return false;
         }
-    }
-    else if(Cplayer.color != "Black" && Cplayer.color != table.color)
-    {
-        cout << "[You can't pick this card !!]" << endl;
-        return false;
     }
     return true;
 }
@@ -282,7 +293,7 @@ void askforColor(Table& theTable)
     cout << "Red, Green, Blue, Yellow" << endl;
     do
     {
-        cin >> color;
+        getline(cin, color);
         cout << "Color: " << color << endl;
     }
     while (color != "Red" && color != "Green" && color != "Blue" && color != "Yellow");
