@@ -33,10 +33,11 @@ struct Table
     Card deck[CARDS];
     Card pick[CARDS];
 };
- 
+
 
 void game(Player [PLAYERS], Table&);
-
+void header();
+void instructions(int);
 
 
 //funciones para manejo de arreglos
@@ -59,12 +60,51 @@ bool winnerCheck(Player player);
 
 int main()
 {
+    int option=0, idiom=0;
+    bool start=false;
+    do
+    {
+        if(option==0){
+          header();
+        }
+        cout <<"  1. Play"<<endl;
+        cout <<"  2. Instructions"<<endl;
+        cout <<"  3. Exit"<<endl;
+        cout <<"\n  Choose an option: ";
+        cin>>option;
 
-    Player players[PLAYERS];
-    Table theTable;
-    //showDeck(theTable, "pick");
-    game(players, theTable);
-    //showDeck(theTable, "deck");
+        switch(option)
+        {
+        case 2:
+            cout<<"\n  1. Spanish"<<endl;
+            cout<<"  2. English"<<endl;
+            do
+            {
+                cout<<"\n  Choose an idiom: ";
+                cin>>idiom;
+            }
+            while(idiom>2 || idiom<1);
+            instructions(idiom);
+            option==0;
+            break;
+        case 3:
+            cout <<"  Have a good day :)"<<endl;
+            break;
+        default:
+            cout <<"  Invalid option !!\n"<<endl;
+            break;
+        case 1:
+            system("cls");
+            start=true;
+            Player players[PLAYERS];
+            Table theTable;
+            //showDeck(theTable, "pick");
+            game(players, theTable);
+            //showDeck(theTable, "deck");
+            break;
+        }
+    }
+    while(option!=3 || start==true);
     return 0;
 }
 
@@ -87,42 +127,58 @@ void game(Player players[], Table& theTable)
     }
 }
 
-
-
-void aame(Player players[], int NP, Table &theTable)   //funcion prueba
-{
-    int S;//seleccionada
-    bool winner = false;
-    while (!winner)
-    {
-        for (int i = 0; i < NP; i++)
-        {
-            cout << players[i].nickname << ": " << endl;
-            for (int j = 0; j < players[i].NCards; j++)
-            {
-                cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type;
-            }
-            cout << "\nSelecciona una carta:" << endl;
-            do
-            {
-                cin >> S;
-            }
-            while (S > players[i].NCards);
-            S--;
-            cout << "\nCarta seleccionada: " <<players[i].deck[S].color << '\t' << players[i].deck[S].value << '\t' << players[i].deck[S].type << endl;
-            insertCard(theTable, players[i].deck[S]);
-            deleteCardPlayer(players[i], S);
-            cout <<"\nCartas actuales de "<<players[i].nickname<< ": "<<endl;
-            for (int j = 0; j < players[i].NCards; j++)
-            {
-                cout << '\t' << j + 1 << '\t' << players[i].deck[j].color << '\t' << players[i].deck[j].value << '\t' << players[i].deck[j].type << endl;
-            }
-
-        }
-        winner = true;
-    }
+void header(){
+    cout<<"  -------------------------------"<<"  -------------------------------"<<endl;
+    cout<<"  |                              "<<" |                               |"<<endl;
+    cout<<"  |      U   U  N   N   OOO      "<<" |           CREATED BY          |"<<endl;
+    cout<<"  |      U   U  NN  N  O   O     "<<" |    David Alejandro Sequera    |"<<endl;
+    cout<<"  |      U   U  N N N  O   O     "<<" |    Jaider David Daza Pardo    |"<<endl;
+    cout<<"  |       UUU   N  NN   OOO      "<<" |    Jhoseph Samirt Lizarazo    |"<<endl;
+    cout<<"  |                              "<<" |    Martin Zhaohong Chen He    |"<<endl;
+    cout<<"  |                              "<<" |                               |"<<endl;
+    cout<<"  -------------------------------"<<"  -------------------------------"<<"\n"<<endl;
 }
 
+void instructions(int idi)
+{
+    system("cls");
+    if(idi==1)
+    {
+        cout<<"\n----- OBJETIVO DEL JUEGO  -----"<<endl;
+        cout<<"\nEl objetivo de UNO es deshacerse de todas las cartas que se (roban) inicialmente, diciendo la palabra (UNO) cuando queda la ultima carta en la mano. El primero que llega a 500 puntos gana."<<endl;
+        cout<<"\n\n-----PREPARACION DEL JUEGO-----"<<endl;
+        cout<<"\n1. Se baraja las cartas y cada jugador recibe siete cartas. Las cartas restantes se ponen encubiertas en el centro y forman el mazo. La primera carta se desvela y se pone al lado. Este mazo es el mazo de descartes."<<endl;
+        cout<<"\n2. El primero jugador pone una carta de su mano al mazo de descartes. Aqui vale: Una carta solo se puede superponer en una carta del mismo color o del mismo numero. Las cartas negras son cartas de accion especiales con reglas particulares."<<endl;
+        cout<<"\n3. Si un jugador no puede poner la carta oportuna, tiene que tomar una carta de pena del mazo (Digitar 0)"<<endl;
+        cout<<"\n4. Quien pone la penultima carta, debe decir (UNO), que indica que tiene la ultima carta en la mano. Si un jugador lo olvida y pasa al siguiente turno, tiene que tomar dos cartas de pena"<<endl;
+        cout<<"\n5. El ganador de la ronda es el que depone la ultima carta. Los puntos se suman y se comienza una nueva ronda."<<endl;
+        cout<<"\n\n-----  CARTAS DE ACCION   -----"<<endl;
+        cout<<"\nCARTA TOMA DOS: El siguiente jugador debe tomar dos cartas y no puede deponer ninguna carta en esta ronda."<<endl;
+        cout<<"\nCARTA DE RETORNO: Con esta carta se cambia la direccion. Si se ha jugado por la izquierda, ahora se juega por la derecha y por la inversa. La carta solo se puede superponer en una carta con color correspondiente o en una otra carta de retorno."<<endl;
+        cout<<"\nCARTA DE INTERMISION (QUITAR TURNO): El siguiente jugador será (saltado). La carta solo se puede superponer en una carta con color correspondiente o en una otra carta de intermision. "<<endl;
+        cout<<"\nCARTA DE ELECCION DE COLORES: El jugador decide que color sigue en el juego. Tambien el color presente puede ser seleccionado. "<<endl;
+        cout<<"\nCARTA TOMA CUATRO: El jugador decide que color sigue en el juego. Ademas, el siguiente jugador debe tomar cuatro cartas. No se puede deponer cualquier carta en esta ronda.\n\n"<<endl;
+    }
+    else
+    {
+        cout<<"\n-----  OBJECT OF THE GAME   -----"<<endl;
+        cout<<"\nThe first player to play all of the cards in their hand in each round scores points for the cards their opponents are left holding. The first player to score 500 points wins the game."<<endl;
+        cout<<"\n\n-----  SETUP OF THE GAME  -----"<<endl;
+        cout<<"\n1. The first player to play all of the cards in their hand in each round scores points for the cards their opponents are left holding. The first player to score 500 points wins the game."<<endl;
+        cout<<"\n2. You must match the top card on the DISCARD pile either by number, color or word."<<endl;
+        cout<<"\n3. If you don't have anything that matches, you must pick a card from the DRAW pile (type 0)"<<endl;
+        cout<<"\n4. Before playing your next to last card, you must say (UNO). If you don't say UNO and the next player begins their turn you must pick TWO more cards from the DRAW pile."<<endl;
+        cout<<"\n5. Once a player plays their last card, the hand is over. Points are tallied and you start over again."<<endl;
+        cout<<"\n\n------   SPECIAL CARDS   ------"<<endl;
+        cout<<"\nDRAW TWO CARD: When you play this card, the next person to play must draw 2 cards and forfeit his/her turn."<<endl;
+        cout<<"\nREVERSE CARD: This card reverses direction of play. Play to the left now passes to the right, and vice versa."<<endl;
+        cout<<"\nSKIP CARD: The next person in line to play after this card is played loses his/her turn and is (skipped). "<<endl;
+        cout<<"\nWILD CARD: When you play this card, you may change the color being played to any color (including the current color) to continue play. "<<endl;
+        cout<<"\nWILD DRAW FOUR CARD: This card allows you to call the next color played and requires the next player to pick 4 cards from the DRAW pile and forfeit his/her turn.\n\n" <<endl;
+    }
+    system("pause");
+    system("cls");
+}
 
 //funciones para funcionalidad del juego
 
@@ -212,7 +268,7 @@ void turns(Player players[PLAYERS], Table& theTable, int NP)
                         }
                     }
                     if (tem.value == 12) {
-                        i++; 
+                        i++;
                         if (i >= NP) { i = 1; }
                     }
                     if (tem.value == 11) {
