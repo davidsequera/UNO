@@ -549,7 +549,7 @@ int createPlayers(Player players[], Table& table)
     do
     {
         cin >> NP;
-    } while (NP > PLAYERS || NP <= 0);
+    } while (NP > PLAYERS || NP <= 1);
     cin.ignore(1);
     cout << "Ingrese los nombres:" << endl;
     for (int i = 0; i < NP; i++) {
