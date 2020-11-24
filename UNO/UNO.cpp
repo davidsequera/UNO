@@ -4,6 +4,7 @@
 
 using namespace std;
 const int CARDS = 108; //tamaño fisico de las cartas
+const int PLAYERS = 10; //tamaño fisico de los jugadores
 
 
 struct Card
@@ -11,6 +12,7 @@ struct Card
     string type;
     string color;
     int value;
+    int score;
 };
 
 struct Player
@@ -31,46 +33,55 @@ struct Table
 };
  
 
-void game(Player [], int, Table&);
+void game(Player [PLAYERS], Table&);
 
 
 
 //funciones para manejo de arreglos
-void createCards(Table& );
+void createCards(Table&, string);
+int createPlayers(Player [], Table&);
 void showDeck(Table, string);
 void deleteCardPlayer(Player &, int);
-void mockingPlayers(Player [], Table&);
+int mockingPlayers(Player[], Table&);
 void deleteCard(Table&);
 void insertCard(Table&, Card);
 void insertCardPlayer(Player&, Table&);
 
 //funciones para funcionalidad del juego
-void turns(Player players[], Table& theTable);
+void turns(Player players[PLAYERS], Table& theTable, int);
 bool conditions(Card, Table);
 void askforColor(Table&);
-void reverse(Player[], int, int&);
+void reverse(Player[PLAYERS], int, int&);
+void UNO(Player&, Table&);
+bool winnerCheck(Player player);
 
 int main()
 {
 
-    const int NP = 4;//number of players
+    Player players[PLAYERS];
     Table theTable;
-    Player players[NP];
-    createCards(theTable);
     //showDeck(theTable, "pick");
-    mockingPlayers(players, theTable);
-    game(players, NP, theTable);
-    showDeck(theTable, "deck");
+    game(players, theTable);
+    //showDeck(theTable, "deck");
     return 0;
 }
 
-void game(Player players[], int NP, Table& theTable)
+void game(Player players[], Table& theTable)
 {
-    int winner = 0;
-    while (winner < 2)
+    int NP = 0;//number of players
+    createCards(theTable, "initial");
+    NP = mockingPlayers(players, theTable);
+    bool winner = false;
+    while (!winner)
     {
-        turns(players, theTable);
-        winner++;
+        turns(players, theTable, NP);
+        for (int i = 0; i < NP; i++) {
+            if (players[i].score >= 500) {
+                system("cls");
+                cout << "El ganador es: " << players[i].nickname << endl << "Score: " << players[i].score << endl;
+                winner = true;
+            }
+        }
     }
 }
 
@@ -113,14 +124,15 @@ void aame(Player players[], int NP, Table &theTable)   //funcion prueba
 
 //funciones para funcionalidad del juego
 
-void turns(Player players[], Table& theTable)
+void turns(Player players[PLAYERS], Table& theTable, int NP)
 {
-    int NP = 4;//parametro
-    for (int i = 0; i < NP; i++)
+    int i = 0;
+    bool winner = false;
+    while (!winner)
     {
         cout << "\nCarta Actual en el mazo:" << '\t' << theTable.deck[theTable.Ndeck].color << '\t' << theTable.deck[theTable.Ndeck].value << '\t' << theTable.deck[theTable.Ndeck].type << endl;
         cout << "Color Actual en el mazo:"<< '\t'  << theTable.color << endl;
-        cout <<"\n"<<players[i].nickname << ": " << endl;
+        cout <<"\n"<<players[i].nickname << ": " << "\t\t\t" "Score:" << players[i].score << endl;
         cout <<"\tCartas actuales"<<endl;
         for (int j = 0; j < players[i].NCards; j++)
         {
@@ -168,24 +180,24 @@ void turns(Player players[], Table& theTable)
                 {
                     insertCard(theTable, players[i].deck[S]);
                     //cambia tambien el color de la tabla
-                    deleteCardPlayer(players[i], S);
                     // Toma 2 == 10; Cambio de sentido == 11;Pierde turno == 12;Cambio de color == 13 ; Toma 4 == 14;
-                    //if (players[i].deck[S].value == 10) {
-                    //    insertCardPlayer(players[i + 1], theTable);
-                    //    insertCardPlayer(players[i + 1], theTable);
-                    //}
-                    //if (players[i].deck[S].value == 11) {
-                    //    reverse(players, NP, i);
-                    //}
-                    //if (players[i].deck[S].value == 12) { i++; }
-                    //if (players[i].deck[S].value == 13) { askforColor(theTable); }
-                    //if (players[i].deck[S].value == 14) {
-                    //    insertCardPlayer(players[i + 1], theTable);
-                    //    insertCardPlayer(players[i + 1], theTable);
-                    //    insertCardPlayer(players[i + 1], theTable);
-                    //    insertCardPlayer(players[i + 1], theTable);
-                    //    askforColor(theTable);
-                    //}
+                    if (players[i].deck[S].value == 10) {
+                        insertCardPlayer(players[i + 1], theTable);
+                        insertCardPlayer(players[i + 1], theTable);
+                    }
+                    if (players[i].deck[S].value == 11) {
+                        reverse(players, NP, i);
+                    }
+                    if (players[i].deck[S].value == 12) { i++; }
+                    if (players[i].deck[S].value == 13) { askforColor(theTable); }
+                    if (players[i].deck[S].value == 14) {
+                        askforColor(theTable);
+                        insertCardPlayer(players[i+ 1], theTable);
+                        insertCardPlayer(players[i + 1], theTable);
+                        insertCardPlayer(players[i + 1], theTable);
+                        insertCardPlayer(players[i + 1], theTable);
+                    }
+                    deleteCardPlayer(players[i], S);
                 }
             }
             else
@@ -196,9 +208,47 @@ void turns(Player players[], Table& theTable)
 
         }
         while (!achieve);
+        UNO(players[i], theTable);
+        winner = winnerCheck(players[i]);
+        i = winner?  i:i+1;
+        if (i >= NP) {i = 0;}
         system("pause");
         system("cls");
         system("pause");
+    }//fin de la ronda
+
+    int score = 0;
+    for (int u = 0; u < NP; u++) {
+        for (int v = 0; v < players[u].NCards; v++) {
+            score += players[u].deck[v].score;
+        }
+    }
+    players[i].score += score;
+}
+
+void UNO(Player &player,Table &theTable) {
+    if (player.NCards == 1) {
+        string uno;
+        cout << "Dijiste UNO" << endl;
+        cout << "Si, escribe UNO" << endl;
+        cout << "No, escribe No" << endl;
+        do
+        {
+            cin >> uno;
+        } while (uno != "UNO" && uno != "No");
+        if (uno == "No") {
+            insertCardPlayer(player, theTable);
+            insertCardPlayer(player, theTable);
+        }
+    }
+}
+
+bool winnerCheck(Player player) {
+    if (player.NCards == 0) {
+        return true;
+    }
+    else {
+        return false;
     }
 }
 
@@ -233,14 +283,15 @@ void askforColor(Table& theTable)
     do
     {
         cin >> color;
+        cout << "Color: " << color << endl;
     }
-    while (color != "Red" || color != "Green" || color != "Blue" || color != "Yellow");
+    while (color != "Red" && color != "Green" && color != "Blue" && color != "Yellow");
     theTable.color = color;
 }
 
-void reverse(Player players[], int size, int &i)
+void reverse(Player players[PLAYERS], int size, int &i)
 {
-    Player copy[100];
+    Player copy[PLAYERS];
     for (int u = 0; u < size; u++)
     {
         copy[u] = players[u];
@@ -262,7 +313,7 @@ void reverse(Player players[], int size, int &i)
 //funciones para manejo de arreglos
 
 
-void createCards(Table& a)
+void createCards(Table& a, string x)
 {
     srand(time(NULL));
     for (int i = 0; i < CARDS; i++)
@@ -296,7 +347,11 @@ void createCards(Table& a)
         {
             //antes de las cartas negras
 
+            // VARIBLE      =   CONDICION ?    SI :    NO;
             a.pick[i].value = value <= 12 ? value : (value - 13);
+
+
+            a.pick[i].score = a.pick[i].value > 9 ? 20 : a.pick[i].value;
             // para valores mayores a 9 se trata de cartas especiales
             // Toma 2 == 10; Cambio de sentido == 11;Pierde turno == 12;
 
@@ -309,6 +364,7 @@ void createCards(Table& a)
         {
             a.pick[i].type = "Special";
             a.pick[i].value = i < (CARDS - 4) ? 13 : 14;
+            a.pick[i].score = 50;
             //Cambio de color == 13 ; Toma 4 == 14
         }
 
@@ -321,21 +377,23 @@ void createCards(Table& a)
         a.pick[random] = temp;
     }// mixer
     a.Npick = CARDS;
-    a.Ndeck = 0;
 
 
     //A�adir carta a deck
-    int PickP = 0;//posicion
-    while (a.pick[PickP].type == "Special")
-    {
-        PickP++;    //garantizar que primera carta no es especial
+    if (x == "initial") {
+        a.Ndeck = 0;
+        int PickP = 0;//posicion
+        while (a.pick[PickP].type == "Special")
+        {
+            PickP++;    //garantizar que primera carta no es especial
+        }
+        Card PickCard = a.pick[0];
+        a.pick[0] = a.pick[PickP];
+        a.pick[PickP] = PickCard;
+        a.deck[a.Ndeck] = a.pick[0];
+        a.color = a.deck[a.Ndeck].color;
+        deleteCard(a);
     }
-    Card PickCard = a.pick[0];
-    a.pick[0] = a.pick[PickP];
-    a.pick[PickP] = PickCard;
-    a.deck[a.Ndeck] = a.pick[0];
-    a.color = a.deck[a.Ndeck].color;
-    deleteCard(a);
 }; //crea maso de 108 en pick y carta inicial
 
 void showDeck(Table a, string x)
@@ -377,6 +435,9 @@ void insertCard(Table& theTable, Card card)
 
 void insertCardPlayer(Player& thePlayer, Table& table)
 {
+    if (table.Npick == 0) {
+        createCards(table, "Nan");
+    }
     thePlayer.deck[thePlayer.NCards] = table.pick[0];
     thePlayer.NCards++;
     deleteCard(table);
@@ -396,7 +457,7 @@ void deleteCardPlayer(Player &thePlayer, int deleted)
     thePlayer.NCards = copy.NCards;
 }//elimina una carta de jugador, por indice
 
-void mockingPlayers(Player players[], Table &table)
+int mockingPlayers(Player players[], Table &table)
 {
     players[0].nickname = "Martin";
     players[1].nickname = "Jhoseph";
@@ -411,4 +472,30 @@ void mockingPlayers(Player players[], Table &table)
             insertCardPlayer(players[i], table);
         }
     }
+    return 4;
 }//crea los jugadores
+
+int createPlayers(Player players[], Table& table)
+{
+    int NP = 0;
+    cout << "Cuantos Jugadores Van a jugar: max.15" << endl;
+    do
+    {
+        cin >> NP;
+    } while (NP > 15 && NP <= 0);
+    cout << "Ingrese los nombres:" << endl;
+    for (int i = 0; i < NP; i++) {
+        cin >> players[i].nickname;
+    }
+    for (int i = 0; i < NP; i++)
+    {
+        players[i].NCards = 0;
+        players[i].score = 0;
+        for (int j = 0; j < 7; j++)
+        {
+            insertCardPlayer(players[i], table);
+        }
+    }
+    system("cls");
+    return NP;
+}//crea los jugadores y retorna el numero de ellos
