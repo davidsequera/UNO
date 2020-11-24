@@ -390,7 +390,7 @@ void createCards(Table& a, string x)
     a.Npick = CARDS;
 
 
-    //A�adir carta a deck
+    //Anadir carta a deck
     if (x == "initial") {
         a.Ndeck = 0;
         int PickP = 0;//posicion
