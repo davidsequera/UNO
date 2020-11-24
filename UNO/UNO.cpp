@@ -64,9 +64,7 @@ int main()
     bool start=false;
     do
     {
-        if(option==0){
-          header();
-        }
+        header();
         cout <<"  1. Play"<<endl;
         cout <<"  2. Instructions"<<endl;
         cout <<"  3. Exit"<<endl;
@@ -85,7 +83,6 @@ int main()
             }
             while(idiom>2 || idiom<1);
             instructions(idiom);
-            option==0;
             break;
         case 3:
             cout <<"  Have a good day :)"<<endl;
