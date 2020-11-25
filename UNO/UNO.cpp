@@ -7,6 +7,7 @@
 using namespace std;
 const int CARDS = 108; //tamaño fisico de las cartas
 const int PLAYERS = 10; //tamaño fisico de los jugadores
+const int SCORE = 500; //tamaño fisico de los jugadores
 
 
 struct Card
@@ -115,7 +116,7 @@ void game(Player players[], Table& theTable)
         createCards4Players(players, theTable, NP);
         turns(players, theTable, NP);
         for (int i = 0; i < NP; i++) {
-            if (players[i].score >= 500) {
+            if (players[i].score >= SCORE) {
                 system("cls");
                 cout << "El ganador es: " << players[i].nickname << endl << "Score: " << players[i].score << endl;
                 winner = true;
@@ -148,8 +149,9 @@ void instructions(int idi)
         cout<<"\n1. Se baraja las cartas y cada jugador recibe siete cartas. Las cartas restantes se ponen encubiertas en el centro y forman el mazo. La primera carta se desvela y se pone al lado. Este mazo es el mazo de descartes."<<endl;
         cout<<"\n2. El primero jugador pone una carta de su mano al mazo de descartes. Aqui vale: Una carta solo se puede superponer en una carta del mismo color o del mismo numero. Las cartas negras son cartas de accion especiales con reglas particulares."<<endl;
         cout<<"\n3. Si un jugador no puede poner la carta oportuna, tiene que tomar una carta de pena del mazo (Digitar 0)"<<endl;
-        cout<<"\n4. Quien pone la penultima carta, debe decir (UNO), que indica que tiene la ultima carta en la mano. Si un jugador lo olvida y pasa al siguiente turno, tiene que tomar dos cartas de pena"<<endl;
-        cout<<"\n5. El ganador de la ronda es el que depone la ultima carta. Los puntos se suman y se comienza una nueva ronda."<<endl;
+        cout<<"\n4. Si el jugador decide tomar una carta del mazo, este pierde el turno y se salta al siguiente jugador." << endl;
+        cout<<"\n5. Quien pone la penultima carta, debe decir (UNO), que indica que tiene la ultima carta en la mano. Si un jugador lo olvida y pasa al siguiente turno, tiene que tomar dos cartas de pena"<<endl;
+        cout<<"\n6. El ganador de la ronda es el que depone la ultima carta. Los puntos se suman y se comienza una nueva ronda."<<endl;
         cout<<"\n\n-----  CARTAS DE ACCION   -----"<<endl;
         cout<<"\nCARTA TOMA DOS: El siguiente jugador debe tomar dos cartas y no puede deponer ninguna carta en esta ronda."<<endl;
         cout<<"\nCARTA DE RETORNO: Con esta carta se cambia la direccion. Si se ha jugado por la izquierda, ahora se juega por la derecha y por la inversa. La carta solo se puede superponer en una carta con color correspondiente o en una otra carta de retorno."<<endl;
@@ -165,8 +167,9 @@ void instructions(int idi)
         cout<<"\n1. The first player to play all of the cards in their hand in each round scores points for the cards their opponents are left holding. The first player to score 500 points wins the game."<<endl;
         cout<<"\n2. You must match the top card on the DISCARD pile either by number, color or word."<<endl;
         cout<<"\n3. If you don't have anything that matches, you must pick a card from the DRAW pile (type 0)"<<endl;
-        cout<<"\n4. Before playing your next to last card, you must say (UNO). If you don't say UNO and the next player begins their turn you must pick TWO more cards from the DRAW pile."<<endl;
-        cout<<"\n5. Once a player plays their last card, the hand is over. Points are tallied and you start over again."<<endl;
+        cout<<"\n4. If the player decides to take a card from the deck, he loses this turn and the game automatically skips to the next player."<< endl;
+        cout<<"\n5. Before playing your next to last card, you must say (UNO). If you don't say UNO and the next player begins their turn you must pick TWO more cards from the DRAW pile."<<endl;
+        cout<<"\n6. Once a player plays their last card, the hand is over. Points are tallied and you start over again."<<endl;
         cout<<"\n\n------   SPECIAL CARDS   ------"<<endl;
         cout<<"\nDRAW TWO CARD: When you play this card, the next person to play must draw 2 cards and forfeit his/her turn."<<endl;
         cout<<"\nREVERSE CARD: This card reverses direction of play. Play to the left now passes to the right, and vice versa."<<endl;
