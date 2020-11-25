@@ -7,7 +7,7 @@
 using namespace std;
 const int CARDS = 108; //tamaño fisico de las cartas
 const int PLAYERS = 10; //tamaño fisico de los jugadores
-const int SCORE = 500; //tamaño fisico de los jugadores
+const int SCORE = 50; //tamaño fisico de los jugadores
 
 
 struct Card
@@ -29,9 +29,8 @@ struct Player
 struct Table
 {
     int Npick;
-    int Ndeck;
     string color;
-    Card deck[CARDS];
+    Card deck;
     Card pick[CARDS];
 };
 
@@ -86,6 +85,7 @@ int main()
             break;
         case 3:
             cout <<"  Have a good day :)"<<endl;
+            option = 3;
             break;
         default:
             cout <<"  Invalid option !!\n"<<endl;
@@ -108,21 +108,24 @@ int main()
 void game(Player players[], Table& theTable)
 {
     int NP = 0;//number of players
+    int counter = 1;
     createCards(theTable, "initial");
     NP = createPlayers(players, theTable);
     bool winner = false;
     while (!winner)
     {
         createCards4Players(players, theTable, NP);
+        cout << "Ronda: " << counter << endl;
         turns(players, theTable, NP);
         for (int i = 0; i < NP; i++) {
             if (players[i].score >= SCORE) {
                 system("cls");
                 cout << "El ganador es: " << players[i].nickname << endl << "Score: " << players[i].score << endl;
+                system("pause");
                 winner = true;
             }
         }
-
+        counter++;
     }
 }
 
@@ -189,7 +192,7 @@ void turns(Player players[PLAYERS], Table& theTable, int NP)
     bool winner = false;
     while (!winner)
     {
-        cout << "\nCarta Actual en el mazo:" << '\t' << theTable.deck[theTable.Ndeck].color << '\t' << theTable.deck[theTable.Ndeck].value << '\t' << theTable.deck[theTable.Ndeck].type << endl;
+        cout << "\nCarta Actual en el mazo:" << '\t' << theTable.deck.color << '\t' << theTable.deck.value << '\t' << theTable.deck.type << endl;
         cout << "Color Actual en el mazo:"<< '\t'  << theTable.color << endl;
         cout <<"\n"<<players[i].nickname << ": " << "\t\t\t" "Score:" << players[i].score << endl;
         cout <<"\tCartas actuales"<<endl;
@@ -333,7 +336,7 @@ bool conditions(Card Cplayer, Table table)
     cout << "\nCarta seleccionada: "  << Cplayer.color << '\t' << Cplayer.value << '\t' << Cplayer.type << endl;
     if (Cplayer.color != "Black")
     {
-        if (Cplayer.color != table.color && Cplayer.value != table.deck[table.Ndeck].value)
+        if (Cplayer.color != table.color && Cplayer.value != table.deck.value)
         {
             cout << "\n[You can't pick this card!]" << endl;
             return false;
@@ -448,7 +451,6 @@ void createCards(Table& a, string x)
 
     //Anadir carta a deck
     if (x == "initial") {
-        a.Ndeck = 0;
         int PickP = 0;//posicion
         while (a.pick[PickP].type == "Special")
         {
@@ -457,8 +459,8 @@ void createCards(Table& a, string x)
         Card PickCard = a.pick[0];
         a.pick[0] = a.pick[PickP];
         a.pick[PickP] = PickCard;
-        a.deck[a.Ndeck] = a.pick[0];
-        a.color = a.deck[a.Ndeck].color;
+        a.deck = a.pick[0];
+        a.color = a.deck.color;
         deleteCard(a);
     }
 }; //crea maso de 108 en pick y carta inicial
@@ -478,8 +480,7 @@ void insertCard(Table& theTable, Card card)
     {
         theTable.color = card.color;
     }
-    theTable.Ndeck++;
-    theTable.deck[theTable.Ndeck] = card;
+    theTable.deck = card;
 }//inserta una carta en deck
 
 void insertCardPlayer(Player& thePlayer, Table& table)
