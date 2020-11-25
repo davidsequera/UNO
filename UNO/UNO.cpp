@@ -7,7 +7,7 @@
 using namespace std;
 const int CARDS = 108; //tamaño fisico de las cartas
 const int PLAYERS = 8; //tamaño fisico de los jugadores
-const int SCORE = 500; //tamaño fisico de los jugadores
+const int SCORE = 10; //Puntaje
 
 
 struct Card
@@ -59,8 +59,9 @@ bool winnerCheck(Player player);
 
 int main()
 {
-    int option=0, idiom=0;
-    bool start=false;
+    int option = 0, idiom = 0;
+    Player players[PLAYERS];
+    Table theTable;
     do
     {
         header();
@@ -72,9 +73,14 @@ int main()
 
         switch(option)
         {
+        case 1:
+            system("cls");
+            game(players, theTable);
+            option = 3;
+            break;
         case 2:
             cout<<"\n  1. Spanish"<<endl;
-            cout<<"  2. English"<<endl;
+            cout<<"\n  2. English"<<endl;
             do
             {
                 cout<<"\n  Choose an idiom: ";
@@ -88,20 +94,11 @@ int main()
             option = 3;
             break;
         default:
-            cout <<"  Invalid option !!\n"<<endl;
-            break;
-        case 1:
-            system("cls");
-            start=true;
-            Player players[PLAYERS];
-            Table theTable;
-            //showDeck(theTable, "pick");
-            game(players, theTable);
-            //showDeck(theTable, "deck");
+            cout << "  Invalid option !!\n" << endl;
             break;
         }
     }
-    while(option!=3 || start==true);
+    while(option!=3);
     return 0;
 }
 
@@ -311,6 +308,7 @@ void UNO(Player &player,Table &theTable) {
         cout << "Dijiste UNO" << endl;
         cout << "Si, escribe UNO" << endl;
         cout << "No, escribe No" << endl;
+        cin.ignore(1);
         do
         {
             getline(cin, uno);
@@ -350,6 +348,7 @@ void askforColor(Table& theTable)
     string color;
     cout << "Seleccione un color" << endl;
     cout << "Red, Green, Blue, Yellow" << endl;
+    cin.ignore(1);
     do
     {
         getline(cin, color);
