@@ -6,8 +6,8 @@
 
 using namespace std;
 const int CARDS = 108; //tamaño fisico de las cartas
-const int PLAYERS = 10; //tamaño fisico de los jugadores
-const int SCORE = 50; //tamaño fisico de los jugadores
+const int PLAYERS = 8; //tamaño fisico de los jugadores
+const int SCORE = 500; //tamaño fisico de los jugadores
 
 
 struct Card
@@ -510,11 +510,11 @@ void deleteCardPlayer(Player &thePlayer, int deleted)
 int createPlayers(Player players[], Table& table)
 {
     int NP = 0;
-    cout << "Cuantos Jugadores Van a jugar: max."<< PLAYERS << endl;
+    cout << "Cuantos Jugadores Van a jugar: (Min. 2 y Max. 8) "<< endl;
     do
     {
         cin >> NP;
-    } while (NP > PLAYERS || NP <= 1);
+    } while (NP > PLAYERS || NP < 2);
     cin.ignore(1);
     cout << "Ingrese los nombres:" << endl;
     for (int i = 0; i < NP; i++) {
@@ -526,6 +526,7 @@ int createPlayers(Player players[], Table& table)
     system("cls");
     return NP;
 }//crea los jugadores y retorna el numero de ellos
+
 
 void createCards4Players(Player players[], Table& table, int NP) {
     for (int i = 0; i < NP; i++)
